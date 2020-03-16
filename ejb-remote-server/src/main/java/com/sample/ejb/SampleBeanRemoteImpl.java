@@ -1,10 +1,8 @@
 package com.sample.ejb;
  
-import javax.ejb.Remote;
 import javax.ejb.Stateless;
  
-@Stateless
-@Remote(SampleBeanRemote.class) 
+@Stateless(name="greetings")
 public class  SampleBeanRemoteImpl implements SampleBeanRemote  {
  
     @Override
