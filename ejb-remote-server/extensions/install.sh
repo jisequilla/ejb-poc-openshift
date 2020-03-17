@@ -1,5 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-injected_dir=$1
-
- cp /tmp/src/extensions/configuration/application-users.properties $JBOSS_HOME/standalone/configuration/application-users.properties 
+INSTALL_DIR="$1"
+cp -p "${INSTALL_DIR}"/configuration/application-users.properties $JBOSS_HOME/standalone/configuration/application-users.properties 
