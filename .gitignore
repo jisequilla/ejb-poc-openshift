@@ -13,6 +13,7 @@ factoryConfiguration.json
 .metadata
 bin/
 tmp/
+target/
 *.tmp
 *.bak
 *.swp
