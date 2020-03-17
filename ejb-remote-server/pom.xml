@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.sample.ejb</groupId>
+	<groupId>com.minsait.devops</groupId>
 	<artifactId>ejb-remote-server</artifactId>
 	<version>10.0.0-SNAPSHOT</version>
 	<packaging>ejb</packaging>
@@ -23,12 +22,9 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
-
 		<version.server.bom>18.0.0.Final</version.server.bom>
-
-
-		<version.jboss.spec.javaee.7.0>1.0.3.Final</version.jboss.spec.javaee.7.0>
+		
+		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 
 		<!-- other plug-in versions -->
 		<version.ejb.plugin>2.3</version.ejb.plugin>
@@ -70,6 +66,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>
@@ -82,6 +79,8 @@
 				<artifactId>wildfly-maven-plugin</artifactId>
 				<version>${version.wildfly.maven.plugin}</version>
 				<configuration>
+					<hostname>127.0.0.1</hostname>
+                    <port>9990</port> 
 					<filename>${project.build.finalName}.jar</filename>
 				</configuration>
 			</plugin>

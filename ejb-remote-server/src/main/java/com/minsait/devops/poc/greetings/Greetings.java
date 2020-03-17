@@ -1,9 +1,9 @@
-package com.sample.ejb;
+package com.minsait.devops.poc.greetings;
 
 import javax.ejb.Remote;
 
 @Remote
-public interface SampleBeanRemote {
+public interface Greetings {
      public String echo(String s);
  
 }

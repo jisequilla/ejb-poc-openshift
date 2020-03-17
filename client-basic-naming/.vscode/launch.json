@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RemoteEJBClient",
+            "request": "launch",
+            "mainClass": "com.sample.client.RemoteEJBClient",
+            "projectName": "client-basic"
+        }
+    ]
+}
