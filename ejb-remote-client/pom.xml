@@ -59,7 +59,7 @@
 			<type>ejb-client</type>
 			<version>${project.version}</version>
 			<scope>system</scope>
-    		<systemPath>${project.basedir}/src/main/resources/ejb-remote-server-client.jar</systemPath>
+			<systemPath>${project.basedir}/src/main/resources/lib/ejb-remote-server-client.jar</systemPath>
 		</dependency>
 
 		<!-- Include the ejb client jars -->
@@ -89,6 +89,12 @@
 				<version>2.4</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/src/main/resources/lib</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 

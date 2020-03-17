@@ -8,7 +8,8 @@
 .project
 .classpath
 factoryConfiguration.json
-
+.vscode
+.DS_Strore/*
 ### Eclipse ###
 .metadata
 bin/
