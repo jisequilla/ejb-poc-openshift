@@ -58,6 +58,8 @@
 			<artifactId>ejb-remote-server</artifactId>
 			<type>ejb-client</type>
 			<version>${project.version}</version>
+			<scope>system</scope>
+    		<systemPath>${project.basedir}/src/main/resources/ejb-remote-server-client.jar</systemPath>
 		</dependency>
 
 		<!-- Include the ejb client jars -->
