@@ -11,6 +11,8 @@ public class CalculatorBean implements Calculator {
 
 	private final static Logger LOGGER = Logger.getLogger(CalculatorBean.class.toString());
 
+	float interest = 5;
+
 	@Resource
 	private SessionContext context;
 
@@ -26,4 +28,8 @@ public class CalculatorBean implements Calculator {
 		return x - y;
 	}
 
+	@Override
+	public float calculateInterest(long money) {
+		return money * (1 + (interest / 100));
+	}
 }
