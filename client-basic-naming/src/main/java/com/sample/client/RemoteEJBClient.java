@@ -102,6 +102,11 @@ public class RemoteEJBClient {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * @throws NamingException
+	*/
 	public void createInitialContext() throws NamingException {
 		Properties prop = new Properties();
 
