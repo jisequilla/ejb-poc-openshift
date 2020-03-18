@@ -60,7 +60,7 @@ Dentro de esta POC se cubrirán los siguientes puntos
 
 4. Realizar escalado horizontal de el pod remoto y ver comportamiento.
 
-5. Matar un POD con un EJB y verificar que el servicio se sigue mantenimiendo 
+5. Matar un POD con un EJB y verificar que el servicio se sigue en funcionamiento 
 
 6. Desplegar una nueva versión del EJB
 
