@@ -1,7 +1,7 @@
 
 = Integración y despliegue EJB sobre PaaS OCP : POC 
 1.0, 2020-03-18
-:description: Despliegue de applicación con EJB y acceso remoto dentro de un contendor en Openshift Container Platform. 
+:description: Despliegue de aplicación con EJB y acceso remoto dentro de un contendor en Openshift Container Platform. 
 :organization: Minsait
 :doctype: book
 // Settings:
@@ -35,16 +35,22 @@
 
 toc::[]
 
-
 == Objetivo
 
-Lograr desplegar una aplicación que contenga Enterprise Java Beans (**EJB**) de tipo de session, en este caso utilizaremos **Statless** y **Statefull** Beans. Para la ejecucion de esta POC se asume que ya existe un cluster de **Openshift** previamente instalado, y se tiene un usuario con permisos de administrador dentro de un proyecto (namespace) en OCP. Se utilizara para el despliegue un servidor **JBoss Entreprise Application Platform 7.2** contenerizado, donde se utilizar el siguiente template de **Red Hat** **eap72-openjdk11-basic-s2i** y la siguiente imagen base **jboss-eap72-openjdk11-openshift-rhel8:1.1** para contenrizar el servidor de aplicaciones y la aplicación en un POD.
+Lograr desplegar una aplicación que contenga Enterprise Java Beans (**EJB**) de tipo de sesion, en este caso utilizaremos **Statless** y **Statefull** Beans. 
 
-Se crearan tres proyectos Java donde uno desplegara los EJB's para ser consumidos de forma remota. El segundo proyecto es una proyeco java simple el cual se conectara al servidor por http y mediante JNDI recupera el Bean y lo ejecuta. El tercer proyecto realiza la misma accion que el anterior, sin embargo este se desplegara dentro de un servidor de aplicaciones y expondra un endpoint que permite el consumo de forma remota de los EJB's.
+Para la ejecución de esta POC se asume que ya existe un cluster de **Openshift** previamente instalado y configurado, se tiene un usuario con permisos de administrador dentro de un proyecto (namespace) en OCP. 
+Se utilizara para el despliegue un servidor **JBoss Entreprise Application Platform 7.2** contenerizado, donde se utilizará el siguiente template de **Red Hat** **eap72-openjdk11-basic-s2i** y la imagen base **jboss-eap72-openjdk11-openshift-rhel8:1.1** para contenerizar el servidor de aplicaciones y la aplicación en un POD.
+
+Se crearan tres proyectos Java:
+
+1.	**ejb-remote-server**: Contendrá los EJB's para ser consumidos de forma remota. 
+2.	**client-basic-naming**: Proyeco java simple invocara de forma remota los EJB’s por http y mediante JNDI. 
+3.	**ejb-remote-client**: Realizara la misma acción que el anterior, sin embargo este se desplegara dentro de un servidor de aplicaciones y expondra un endpoint que permite el consumo de forma remota de los EJB's.
 
 === Resumen
 
-Dentro de esta POC se cubiran los siguientes puntos
+Dentro de esta POC se cubrirán los siguientes puntos
 
 1. Despliegue de una aplicación EJB sobre un JBOSS en un pod dentro de Openshift
 
@@ -60,12 +66,17 @@ Dentro de esta POC se cubiran los siguientes puntos
 
 7. Prueba de EJBs de session Stateless y Stateful 
 
+8. Configuración automática de servidor en el despliegue
 
 == Configuracion
 
 Para el despliegue de los contenedores, se asume que ya existe el Openshift instalado y se tiene una cuenta de red hat ya previamente configurada, tambien se posee un usuario con permisos de administador en el proyecto.
 
-=== Configuracion del proyecto (OCP)
+NOTE: En caso de ser necesario cambio de configuración en el servidor se debe actualizar los ficheros de configuración en la carpeta configuración, con la configuración deseada.
+
+
+
+=== Configuración del proyecto (OCP)
 
 * Crear proyecto
 
@@ -85,19 +96,16 @@ NOTE: Para poder hacer esta actividad se debe primero crear un token de autentic
 oc replace --force -f https://raw.githubusercontent.com/jboss-container-images/jboss-eap-7-openshift-image/eap72/templates/eap72-basic-s2i.json
 ----
 
-* Crear nueva aplicacion (ejb-remote-server)
+* Crear nueva aplicación (ejb-remote-server)
 
 [source%aligment, bash]
 ----
-oc new-app --template=eap72-basic-s2i \
+oc new-app --template=eap72-openjdk11-basic-s2i \
  -p IMAGE_STREAM_NAMESPACE=${PROJECT_NAME} \
  -p SOURCE_REPOSITORY_URL=https://github.com/jisequilla/ejb-poc-openshift.git \
  -p SOURCE_REPOSITORY_REF=develop \
  -p CONTEXT_DIR=ejb-remote-server \
- -e ADMIN_USERNAME=ejbuser \
- -e ADMIN_PASSWORD=ejbpassword \
- -e APPLICATION_NAME=ejb-remote-server \
- -e CUSTOM_INSTALL_DIRECTORIES=extensions/* \
+ -p APPLICATION_NAME=ejb-remote-server
 ----
 
 * Verficar configuración y despliegue
@@ -114,25 +122,16 @@ oc logs -f bc/ejb-remote-server
 oc get pods --selector=application=ejb-remote-server
 ----
 
-* realiar port forward de el despliegue a maquina local para probar acceso remoto
+* Realizar port forward de el despliegue a maquina local para probar acceso remoto
 
 [source%aligment, bash]
 ----
 oc port-forward ejb-remote-server-${identificador-pod} 8080:8080
 ----
 
-* Configurar usuario en el pod
+* Ejecutar proceso client-basic-naming
 
-NOTE: Esta accion solo se debe realizar hasta identificar por que no se ejecuta el script de configuracion install.sh
-
-[source%aligment, bash]
-----
-oc rsh ejb-remote-server-${identificador-pod} /tmp/src/extensions/install.sh
-----
-
-* Ejecutar proceso clienta-basic-naming
-
-WARNING: Verfifcar que la URL sea localhost:8080 o el puerto espesificado en el paso anterior.
+WARNING: Verificar que la URL sea localhost:8080 o el puerto espesificado en el paso anterior.
 
 [source%aligment, bash]
 ----
@@ -146,18 +145,15 @@ NOTE: En caso de no tener un repositorio de artefactos se debe compilar primero 
 
 [source%aligment, bash]
 ----
-oc new-app --template=eap72-basic-s2i \
+oc new-app --template=eap72-openjdk11-basic-s2i \
  -p IMAGE_STREAM_NAMESPACE=${PROJECT_NAME} \
  -p SOURCE_REPOSITORY_URL=https://github.com/jisequilla/ejb-poc-openshift.git \
  -p SOURCE_REPOSITORY_REF=develop \
  -p CONTEXT_DIR=ejb-remote-client \
- -e ADMIN_USERNAME=ejbuser \
- -e ADMIN_PASSWORD=ejbpassword \
- -e APPLICATION_NAME=ejb-remote-client \
- -e CUSTOM_INSTALL_DIRECTORIES=extensions/* \
+ -p APPLICATION_NAME=ejb-remote-client
 ----
 
-=== Ejecucion de pruebas
+=== Ejecución de pruebas
 
 * Incrementar la cantidad de pods de el servidor
 
@@ -178,12 +174,9 @@ NOTE: El resultado de este comando sera utilizado como valor de la variable **HO
 
     ${HOST}/ejb-remote-client/greetings?name=Gandalf
 
-
 * Consultar serivcio statefull
 
-
     ${HOST}/ejb-remote-client/accountclient?money=200
-
 
 * Eliminar replicas de el servidor
 [source%aligment, bash]
@@ -191,14 +184,13 @@ NOTE: El resultado de este comando sera utilizado como valor de la variable **HO
 oc scale dc/ejb-remote-server --replicas=1
 ----
 
-
-=== Stack tecnologico.
+=== Stack tecnológico.
 
 .Componentes
 [cols="2"]
 |===
 |Componente 
-|Versioin
+|Version
 
 | OCP
 | 4.3
@@ -234,8 +226,6 @@ Quedan fuera del alcance de esta POC los siguientes puntos:
 
 1. Comunicacion fuera del cluster con el EJB de forma remota
 2. Prueba con MDB's
-3. Realizar carga automatica de la configuración de el JBOSS
-
 
 == Referencias:
 
@@ -244,6 +234,7 @@ Quedan fuera del alcance de esta POC los siguientes puntos:
 2. http://www.mastertheboss.com/jboss-server/jboss-as-7/jboss-as-7-remote-ejb-client-tutorial?showall=1[Ejemplo comunicacion EJB remoto]
 
 3. https://github.com/wildfly/quickstart[Wildfly]
+
 
 
 
