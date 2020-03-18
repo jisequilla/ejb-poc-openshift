@@ -227,7 +227,6 @@ Quedan fuera del alcance de esta POC los siguientes puntos:
 1. Comunicacion fuera del cluster con el EJB de forma remota
 2. Prueba con MDB's
 3. Realizar carga automatica de la configuración de el JBOSS
-4. Transaccionalidad entre aplicaciones desplegadas en diferenes JBOSS.
 
 
 == Referencias:
