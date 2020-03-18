@@ -121,6 +121,14 @@ oc get pods --selector=application=ejb-remote-server
 oc port-forward ejb-remote-server-${identificador-pod} 8080:8080
 ----
 
+* Configurar usuario en el pod
+
+NOTE: Esta accion solo se debe realizar hasta identificar por que no se ejecuta el script de configuracion install.sh
+
+[source%aligment, bash]
+----
+oc rsh ejb-remote-server-${identificador-pod} /tmp/src/extensions/install.sh
+----
 
 * Ejecutar proceso clienta-basic-naming
 
