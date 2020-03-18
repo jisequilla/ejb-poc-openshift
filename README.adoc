@@ -68,7 +68,7 @@ Dentro de esta POC se cubrirán los siguientes puntos
 
 8. Configuración automática de servidor en el despliegue
 
-== Configuracion
+== Configuración
 
 Para el despliegue de los contenedores, se asume que ya existe el Openshift instalado y se tiene una cuenta de red hat ya previamente configurada, tambien se posee un usuario con permisos de administador en el proyecto.
 
@@ -153,6 +153,7 @@ oc new-app --template=eap72-openjdk11-basic-s2i \
  -p APPLICATION_NAME=ejb-remote-client
 ----
 
+
 === Ejecución de pruebas
 
 * Incrementar la cantidad de pods de el servidor
@@ -165,20 +166,24 @@ oc scale dc/ejb-remote-server --replicas=3
 *  Recuperar URL para acceder a servicio
 [source%aligment, bash]
 ----
-oc get route ejb-remote-client -o json | jq -r '.spec.host'
+HOST=$(oc get route ejb-remote-client -o json | jq -r '.spec.host')
 ----
 
-NOTE: El resultado de este comando sera utilizado como valor de la variable **HOST** en los pasos posteriores.
-
 * Consultar servicio stateless
-
-    ${HOST}/ejb-remote-client/greetings?name=Gandalf
+[source%aligment, bash]
+----
+curl --insecure https://${HOST}/ejb-remote-client/greetings?name=Gandalf
+----
 
 * Consultar serivcio statefull
 
-    ${HOST}/ejb-remote-client/accountclient?money=200
+[source%aligment, bash]
+----
+curl --insecure https://${HOST}/ejb-remote-client/accountclient?money=200
+----
 
 * Eliminar replicas de el servidor
+
 [source%aligment, bash]
 ----
 oc scale dc/ejb-remote-server --replicas=1
@@ -224,16 +229,14 @@ NOTE: Se ha realizado la prueba tanto con JDK 11 como con JDK 8
 
 Quedan fuera del alcance de esta POC los siguientes puntos:
 
-1. Comunicacion fuera del cluster con el EJB de forma remota
+1. Comunicación fuera del cluster con el EJB de forma remota
 2. Prueba con MDB's
 
 == Referencias:
 
-1. https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.2/html-single/getting_started_with_jboss_eap_for_openshift_container_platform/index[Despliegue de servidor JBsoo eap en Opneshift]
+1. https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.2/html-single/getting_started_with_jboss_eap_for_openshift_container_platform/index[Despliegue de servidor JBoss EAP 7.2 en Opneshift]
 
-2. http://www.mastertheboss.com/jboss-server/jboss-as-7/jboss-as-7-remote-ejb-client-tutorial?showall=1[Ejemplo comunicacion EJB remoto]
-
-3. https://github.com/wildfly/quickstart[Wildfly]
+2. https://github.com/wildfly/quickstart[Wildfly Quickstar]
 
 
 
