@@ -8,11 +8,12 @@
 .project
 .classpath
 factoryConfiguration.json
-
+.vscode
 ### Eclipse ###
 .metadata
 bin/
 tmp/
+target/
 *.tmp
 *.bak
 *.swp
@@ -178,7 +179,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+/target/*.jar
 *.war
 *.nar
 *.ear
@@ -217,3 +218,19 @@ buildNumber.properties
 .history
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,java-web,intellij,code-java,visualstudiocode
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

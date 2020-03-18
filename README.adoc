@@ -1,0 +1,12 @@
+
+
+
+
+=== Referencias:
+
+https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.2/html-single/getting_started_with_jboss_eap_for_openshift_container_platform/index
+
+http://www.mastertheboss.com/jboss-server/jboss-as-7/jboss-as-7-remote-ejb-client-tutorial?showall=1
+
+
+https://github.com/wildfly/quickstart
