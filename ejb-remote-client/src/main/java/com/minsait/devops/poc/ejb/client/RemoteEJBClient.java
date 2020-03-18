@@ -20,14 +20,14 @@ public class RemoteEJBClient {
 		Context context = null;
 		String result = null;
 
-//		try {
+		try {
 			context = createInitialContext();
 			final Greetings ejb = this.lookupRemoteEJB(context);
 			result = ejb.echo(name);
 			LOGGER.info(result);
-//		} finally {
-//			this.closeContext(context);
-//		}
+		} finally {
+			this.closeContext(context);
+		}
 		return result;
 	}
 
