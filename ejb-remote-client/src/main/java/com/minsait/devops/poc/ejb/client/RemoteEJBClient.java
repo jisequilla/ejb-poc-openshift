@@ -50,7 +50,10 @@ public class RemoteEJBClient {
 	private Context createInitialContext() throws NamingException {
 		Properties prop = new Properties();
 
-        prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
+		prop.put(Context.PROVIDER_URL, "http-remoting://ejb-remote-server:8080");
+		prop.put(Context.SECURITY_PRINCIPAL, "ejbuser");
+		prop.put(Context.SECURITY_CREDENTIALS, "ejbpassword");
 
 		return new InitialContext(prop);
 	}
