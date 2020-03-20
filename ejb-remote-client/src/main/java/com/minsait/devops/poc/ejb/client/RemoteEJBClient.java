@@ -20,14 +20,14 @@ public class RemoteEJBClient {
 		Context context = null;
 		String result = null;
 
-//		try {
+		try {
 			context = createInitialContext();
 			final Greetings ejb = this.lookupRemoteEJB(context);
 			result = ejb.echo(name);
 			LOGGER.info(result);
-//		} finally {
-//			this.closeContext(context);
-//		}
+		} finally {
+			this.closeContext(context);
+		}
 		return result;
 	}
 
@@ -50,11 +50,10 @@ public class RemoteEJBClient {
 	private Context createInitialContext() throws NamingException {
 		Properties prop = new Properties();
 
-		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+		prop.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
 		prop.put(Context.PROVIDER_URL, "http-remoting://ejb-remote-server:8080");
 		prop.put(Context.SECURITY_PRINCIPAL, "ejbuser");
 		prop.put(Context.SECURITY_CREDENTIALS, "ejbpassword");
-		prop.put("jboss.naming.client.ejb.context", true);
 
 		return new InitialContext(prop);
 	}

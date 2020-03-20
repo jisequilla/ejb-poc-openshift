@@ -9,6 +9,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import com.minsait.devops.poc.ejb.statefull.Account;
+import com.minsait.devops.poc.ejb.statefull.exception.InsufficientFundsException;
 import com.minsait.devops.poc.ejb.stateless.Calculator;
 
 @Stateless
@@ -29,13 +30,13 @@ public class AccountEJBClient {
 		account.deposit(money/2);
 		LOGGER.info("Deposit " +(money/2));
 
-//		try {
-//			account.withdraw(money/3);
-//			LOGGER.info("Withdraw "+(money/3));
-//
-//		} catch (InsufficientFundsException e) {
-//			LOGGER.info("ERROR : " + e.getMessage());
-//		}
+		try {
+			account.withdraw(money/3);
+			LOGGER.info("Withdraw "+(money/3));
+
+		} catch (InsufficientFundsException e) {
+			LOGGER.info("ERROR : " + e.getMessage());
+		}
 		money = account.getMoney();
 		LOGGER.info("Money left " + money);
 		
@@ -43,6 +44,8 @@ public class AccountEJBClient {
 		float totalMoney = calculator.add(money.intValue(), 10);
 		LOGGER.info("Money plus interests " + totalMoney);
 		
+		this.closeContext(context);
+
 		return totalMoney;
 
 

@@ -1,0 +1,13 @@
+This example builds up a Java EE project which invokes an EJB located in another application.
+
+###### Build and Deploy
+
+[source%aligment, bash]
+----
+mvn install wildfly:deploy
+----
+
+###### Test
+    http://localhost:8080/ejb-remote-client/greetings?name=Frodo
+
+    http://localhost:8080/ejb-remote-client/accountclient?money=200
